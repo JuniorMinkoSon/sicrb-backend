@@ -16,12 +16,13 @@ export function compare(a: unknown, b: unknown): number {
  * Applique tri + pagination côté "serveur" (ici l'adapter mock) afin que les
  * composants ne manipulent jamais que des pages, comme avec l'API Quarkus.
  */
-export function paginate<T extends Record<string, unknown>>(rows: T[], query: PageQuery = {}): Page<T> {
+export function paginate<T>(rows: T[], query: PageQuery = {}): Page<T> {
   const { page = 1, size = 10, sort } = query
   let out = rows
   if (sort) {
     const [field, dir = 'asc'] = sort.split(':')
-    out = [...rows].sort((a, b) => (dir === 'desc' ? -1 : 1) * compare(a[field], b[field]))
+    const champ = (row: T) => (row as Record<string, unknown>)[field]
+    out = [...rows].sort((a, b) => (dir === 'desc' ? -1 : 1) * compare(champ(a), champ(b)))
   }
   const total = out.length
   const safeSize = Math.min(Math.max(size, 1), 200)

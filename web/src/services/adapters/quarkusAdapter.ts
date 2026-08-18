@@ -15,13 +15,14 @@ import type { SicrbApi } from '../contracts'
 const BASE = import.meta.env.VITE_API_BASE_URL ?? '/api'
 
 export class ApiError extends Error {
-  constructor(
-    message: string,
-    readonly status: number,
-    readonly url: string,
-  ) {
+  readonly status: number
+  readonly url: string
+
+  constructor(message: string, status: number, url: string) {
     super(message)
     this.name = 'ApiError'
+    this.status = status
+    this.url = url
   }
 }
 

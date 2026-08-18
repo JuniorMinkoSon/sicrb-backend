@@ -40,7 +40,7 @@ export function BarreChart({
         <CartesianGrid strokeDasharray="3 3" stroke="#eceef2" vertical={false} />
         <XAxis dataKey={xKey} {...axis} interval={0} angle={-18} textAnchor="end" height={54} />
         <YAxis {...axis} tickFormatter={(v: number) => (money ? formatFcfaCourt(v) : String(v))} width={money ? 84 : 44} />
-        <Tooltip formatter={(v: number) => (money ? formatFcfaCourt(v) : v)} contentStyle={{ fontSize: 12 }} />
+        <Tooltip formatter={(v) => (money ? formatFcfaCourt(Number(v)) : String(v))} contentStyle={{ fontSize: 12 }} />
         {series.length > 1 && <Legend wrapperStyle={{ fontSize: 12 }} />}
         {series.map((s, i) => (
           <Bar key={s.key} dataKey={s.key} name={s.label} fill={PALETTE[i % PALETTE.length]} radius={[3, 3, 0, 0]} />
@@ -69,7 +69,7 @@ export function LigneChart({
         <CartesianGrid strokeDasharray="3 3" stroke="#eceef2" vertical={false} />
         <XAxis dataKey={xKey} {...axis} />
         <YAxis {...axis} tickFormatter={(v: number) => (money ? formatFcfaCourt(v) : String(v))} width={money ? 84 : 44} />
-        <Tooltip formatter={(v: number) => (money ? formatFcfaCourt(v) : v)} contentStyle={{ fontSize: 12 }} />
+        <Tooltip formatter={(v) => (money ? formatFcfaCourt(Number(v)) : String(v))} contentStyle={{ fontSize: 12 }} />
         {series.length > 1 && <Legend wrapperStyle={{ fontSize: 12 }} />}
         {series.map((s, i) => (
           <Line key={s.key} type="monotone" dataKey={s.key} name={s.label} stroke={PALETTE[i % PALETTE.length]} strokeWidth={2} dot={false} />
@@ -98,7 +98,7 @@ export function AireChart({
         <CartesianGrid strokeDasharray="3 3" stroke="#eceef2" vertical={false} />
         <XAxis dataKey={xKey} {...axis} />
         <YAxis {...axis} tickFormatter={(v: number) => (money ? formatFcfaCourt(v) : String(v))} width={money ? 84 : 44} />
-        <Tooltip formatter={(v: number) => (money ? formatFcfaCourt(v) : v)} contentStyle={{ fontSize: 12 }} />
+        <Tooltip formatter={(v) => (money ? formatFcfaCourt(Number(v)) : String(v))} contentStyle={{ fontSize: 12 }} />
         <Legend wrapperStyle={{ fontSize: 12 }} />
         {series.map((s, i) => (
           <Area

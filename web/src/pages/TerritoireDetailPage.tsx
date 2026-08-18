@@ -17,7 +17,7 @@ import {
   toneForStatut,
 } from '../components/ui'
 import { useTerritoire } from '../hooks/useApi'
-import { formatDate, formatFcfaCourt, formatNombre, formatPourcent, humaniser } from '../utils/format'
+import { formatDate, formatFcfaCourt, formatNombre, humaniser } from '../utils/format'
 
 export default function TerritoireDetailPage() {
   const { id } = useParams()
