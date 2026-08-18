@@ -16,6 +16,7 @@ import {
 } from '../components/ui'
 import { ENGAGEMENT_STATUTS, SOURCES_FINANCEMENT } from '../constants/referentiels'
 import { useDashboard, useEngagements, useLignes } from '../hooks/useApi'
+import { useExercice } from '../hooks/useExercice'
 import { useTableQuery } from '../hooks/useTableQuery'
 import type { Engagement, LigneBudgetaire } from '../types/domain'
 import { formatDate, formatFcfa, formatFcfaCourt, formatNombre, formatPourcent, humaniser } from '../utils/format'
@@ -24,7 +25,8 @@ export default function FinancesPage() {
   const [onglet, setOnglet] = useState('lignes')
   const lignesQuery = useTableQuery({ size: 10, sort: 'code:asc' })
   const engQuery = useTableQuery({ size: 10, sort: 'dateCreation:desc' })
-  const lignes = useLignes(lignesQuery.query)
+  const { exercice, setExercice } = useExercice()
+  const lignes = useLignes({ ...lignesQuery.query, exercice: exercice || undefined })
   const toutesLignes = useLignes({ size: 200 })
   const engagements = useEngagements(engQuery.query)
   const tousEngagements = useEngagements({ size: 400 })
@@ -146,8 +148,8 @@ export default function FinancesPage() {
               aria-label="Exercice"
               className="w-32"
               placeholder="Exercices"
-              value={lignesQuery.filtres.exercice ?? ''}
-              onChange={(e) => lignesQuery.setFiltre('exercice', e.target.value)}
+              value={exercice}
+              onChange={(e) => setExercice(e.target.value)}
               options={Array.from(new Set((toutesLignes.data?.items ?? []).map((l) => String(l.exercice)))).map((y) => ({ value: y, label: y }))}
             />
           </FilterBar>

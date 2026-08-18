@@ -11,9 +11,34 @@ const tones: Record<Tone, string> = {
   danger: 'bg-red-50 text-red-700 ring-red-200',
 }
 
-export function Badge({ tone = 'neutral', children, className }: { tone?: Tone; children: ReactNode; className?: string }) {
+const points: Record<Tone, string> = {
+  neutral: 'bg-ink-400',
+  info: 'bg-brand-500',
+  success: 'bg-emerald-500',
+  warning: 'bg-amber-500',
+  danger: 'bg-red-500',
+}
+
+export function Badge({
+  tone = 'neutral',
+  children,
+  className,
+  dot = false,
+}: {
+  tone?: Tone
+  children: ReactNode
+  className?: string
+  dot?: boolean
+}) {
   return (
-    <span className={cn('inline-flex items-center rounded px-2 py-0.5 text-xs font-medium ring-1 ring-inset', tones[tone], className)}>
+    <span
+      className={cn(
+        'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset',
+        tones[tone],
+        className,
+      )}
+    >
+      {dot && <span className={cn('size-1.5 rounded-full', points[tone])} aria-hidden />}
       {children}
     </span>
   )

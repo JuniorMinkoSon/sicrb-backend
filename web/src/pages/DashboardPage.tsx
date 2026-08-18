@@ -39,16 +39,16 @@ export default function DashboardPage() {
       />
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
-        <StatCard label="Projets actifs" value={formatNombre(data.nbProjetsEnTravaux)} hint={`${data.nbProjets} projets au portefeuille`} icon={<Sprout className="size-4" />} />
-        <StatCard label="Projets terminés" value={formatNombre(termines)} hint="Ouvrages en exploitation" tone="positive" icon={<HardHat className="size-4" />} />
-        <StatCard label="Projets en difficulté" value={formatNombre(data.nbProjetsEnRetard)} hint="Risque élevé ou retard constaté" tone="critical" icon={<AlertTriangle className="size-4" />} />
-        <StatCard label="Infrastructures" value={formatNombre(data.nbInfrastructures)} hint="Patrimoine suivi" icon={<Building2 className="size-4" />} />
-        <StatCard label="Bénéficiaires" value={formatNombre(data.beneficiaires)} hint="Population couverte par les projets" icon={<Users className="size-4" />} />
-        <StatCard label="Budget total" value={formatFcfaCourt(data.budgetPrevu)} hint={`${data.nbProgrammes} programmes`} icon={<Banknote className="size-4" />} />
-        <StatCard label="Budget engagé" value={formatFcfaCourt(data.budgetEngage)} hint={formatPourcent((data.budgetEngage / data.budgetPrevu) * 100)} />
-        <StatCard label="Budget exécuté" value={formatFcfaCourt(data.budgetPaye)} hint={formatPourcent(data.tauxExecutionFinanciere)} />
-        <StatCard label="Exécution physique" value={formatPourcent(data.tauxExecutionPhysique)} hint="Avancement moyen des chantiers" />
-        <StatCard label="Alertes critiques" value={formatNombre(alertes.filter((a) => a.niveau === 'CRITIQUE').length)} tone="critical" hint={`${alertes.length} alertes au total`} />
+        <StatCard label="Projets actifs" value={formatNombre(data.nbProjetsEnTravaux)} count={data.nbProjetsEnTravaux} format={formatNombre} hint={`${data.nbProjets} projets au portefeuille`} icon={<Sprout className="size-4" />} />
+        <StatCard label="Projets terminés" value={formatNombre(termines)} count={termines} format={formatNombre} hint="Ouvrages en exploitation" tone="positive" icon={<HardHat className="size-4" />} />
+        <StatCard label="Projets en difficulté" value={formatNombre(data.nbProjetsEnRetard)} count={data.nbProjetsEnRetard} format={formatNombre} hint="Risque élevé ou retard constaté" tone="critical" icon={<AlertTriangle className="size-4" />} />
+        <StatCard label="Infrastructures" value={formatNombre(data.nbInfrastructures)} count={data.nbInfrastructures} format={formatNombre} hint="Patrimoine suivi" icon={<Building2 className="size-4" />} />
+        <StatCard label="Bénéficiaires" value={formatNombre(data.beneficiaires)} count={data.beneficiaires} format={formatNombre} hint="Population couverte par les projets" icon={<Users className="size-4" />} tone="accent" />
+        <StatCard label="Budget total" value={formatFcfaCourt(data.budgetPrevu)} count={data.budgetPrevu} format={formatFcfaCourt} hint={`${data.nbProgrammes} programmes`} icon={<Banknote className="size-4" />} />
+        <StatCard label="Budget engagé" value={formatFcfaCourt(data.budgetEngage)} count={data.budgetEngage} format={formatFcfaCourt} hint={`${formatPourcent((data.budgetEngage / data.budgetPrevu) * 100)} du budget total`} icon={<Banknote className="size-4" />} tone="neutral" />
+        <StatCard label="Budget exécuté" value={formatFcfaCourt(data.budgetPaye)} count={data.budgetPaye} format={formatFcfaCourt} hint={formatPourcent(data.tauxExecutionFinanciere)} icon={<Banknote className="size-4" />} tone="positive" />
+        <StatCard label="Exécution physique" value={formatPourcent(data.tauxExecutionPhysique)} count={data.tauxExecutionPhysique} format={formatPourcent} hint="Avancement moyen des chantiers" icon={<HardHat className="size-4" />} tone="warning" />
+        <StatCard label="Alertes critiques" value={formatNombre(alertes.filter((a) => a.niveau === 'CRITIQUE').length)} count={alertes.filter((a) => a.niveau === 'CRITIQUE').length} format={formatNombre} tone="critical" hint={`${alertes.length} alertes au total`} icon={<AlertTriangle className="size-4" />} />
       </div>
 
       <div className="mt-4 grid gap-4 xl:grid-cols-3">
@@ -117,10 +117,15 @@ export default function DashboardPage() {
           <ul className="space-y-2">
             {alertes.map((a) => (
               <li key={a.id}>
-                <button onClick={() => navigate(a.moduleCible)} className="w-full rounded-md border border-ink-200 p-3 text-left hover:bg-ink-50">
+                <button
+                  onClick={() => navigate(a.moduleCible)}
+                  className="w-full rounded-lg border border-ink-200 p-3 text-left transition-colors hover:border-brand-300 hover:bg-brand-50/60"
+                >
                   <div className="flex items-start justify-between gap-2">
                     <p className="text-sm font-medium text-ink-900">{a.titre}</p>
-                    <Badge tone={niveauTone[a.niveau]}>{a.niveau}</Badge>
+                    <Badge dot tone={niveauTone[a.niveau]}>
+                      {a.niveau}
+                    </Badge>
                   </div>
                   <p className="mt-1 text-xs text-ink-600">{a.detail}</p>
                 </button>
