@@ -1,32 +1,17 @@
 import { useEffect, useState } from 'react'
 import { Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
-import { Link, Outlet, useLocation } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import { apiMode } from '../../services'
 import { Badge } from '../ui/Badge'
 import { Button } from '../ui/Button'
 import { ExerciceSelector } from './ExerciceSelector'
 import { GlobalSearch } from './GlobalSearch'
+import { Marque, MENTION_DEMO } from './Marque'
 import { NotificationsMenu } from './NotificationsMenu'
 import { RoleMenu } from './RoleMenu'
 import { Sidebar } from './Sidebar'
 
 const STORAGE_KEY = 'sicrb.sidebar.collapsed'
-
-function Marque({ compact = false }: { compact?: boolean }) {
-  return (
-    <Link to="/dashboard" className="flex items-center gap-2.5">
-      <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-white/10 text-xs font-bold tracking-tight text-white ring-1 ring-inset ring-white/20">
-        CRB
-      </span>
-      {!compact && (
-        <span className="min-w-0 leading-tight">
-          <span className="block truncate text-sm font-semibold text-white">Conseil Régional de la Bagoué</span>
-          <span className="block truncate text-[11px] text-brand-200/80">Système d'information des investissements</span>
-        </span>
-      )}
-    </Link>
-  )
-}
 
 export function AppLayout() {
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem(STORAGE_KEY) === '1')
@@ -48,7 +33,7 @@ export function AppLayout() {
       >
         <div className="sticky top-0 flex h-screen flex-col">
           <div className={`flex h-16 items-center border-b border-white/10 ${collapsed ? 'justify-center px-2' : 'px-4'}`}>
-            <Marque compact={collapsed} />
+            <Marque compact={collapsed} to="/dashboard" />
           </div>
           <div className="min-h-0 flex-1">
             <Sidebar collapsed={collapsed} />
@@ -60,7 +45,7 @@ export function AppLayout() {
         <div className="fixed inset-0 z-50 flex lg:hidden">
           <div className="flex w-[280px] flex-col bg-brand-900 shadow-2xl">
             <div className="flex h-16 items-center justify-between border-b border-white/10 px-4">
-              <Marque />
+              <Marque to="/dashboard" />
               <button aria-label="Fermer le menu" onClick={() => setMobileOpen(false)} className="text-brand-100 hover:text-white">
                 <X className="size-5" aria-hidden />
               </button>
@@ -113,9 +98,7 @@ export function AppLayout() {
           </div>
         </main>
 
-        <footer className="border-t border-ink-200 bg-white px-4 py-3 text-[11px] text-ink-500 lg:px-6">
-          SICRB — maquette fonctionnelle. Les données affichées sont des données de démonstration, sans valeur officielle.
-        </footer>
+        <footer className="border-t border-ink-200 bg-white px-4 py-3 text-[11px] text-ink-500 lg:px-6">{MENTION_DEMO}</footer>
       </div>
     </div>
   )
