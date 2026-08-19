@@ -11,6 +11,8 @@ export interface MapPoint {
   montant?: number
   couche: 'PROJETS' | 'INFRASTRUCTURES' | 'REQUETES'
   tone?: 'ok' | 'alerte' | 'critique'
+  /** Couleur explicite du marqueur (prioritaire sur `tone`), ex. légende publique par statut. */
+  couleur?: string
   href?: string
 }
 
@@ -49,8 +51,8 @@ export function SigMap({
                       center={[p.latitude, p.longitude]}
                       radius={couche === 'INFRASTRUCTURES' ? 5 : 7}
                       pathOptions={{
-                        color: couleurs[p.tone ?? 'ok'],
-                        fillColor: couleurs[p.tone ?? 'ok'],
+                        color: p.couleur ?? couleurs[p.tone ?? 'ok'],
+                        fillColor: p.couleur ?? couleurs[p.tone ?? 'ok'],
                         fillOpacity: 0.55,
                         weight: 1.5,
                       }}
