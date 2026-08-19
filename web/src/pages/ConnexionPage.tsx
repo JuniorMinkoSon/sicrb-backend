@@ -35,7 +35,10 @@ export default function ConnexionPage() {
     setErreur(null)
     seConnecter({ nom: ROLES_META[profil].utilisateurDemo, email: email.trim(), role: profil })
     setRole(profil)
-    navigate(redirection ?? (profil === 'CITIZEN' ? '/portail/citoyen' : routeParDefaut(profil)), { replace: true })
+    navigate(
+      redirection ?? (profil === 'CITIZEN' ? '/portail/citoyen' : profil === 'CONTRACTOR' ? '/portail/entrepreneur' : routeParDefaut(profil)),
+      { replace: true },
+    )
   }
 
   return (

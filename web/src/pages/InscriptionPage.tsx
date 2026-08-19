@@ -46,7 +46,7 @@ export default function InscriptionPage() {
     setErreur(null)
     seConnecter({ nom: nom.trim(), email: email.trim(), role: profil })
     setRole(profil)
-    navigate(profil === 'CITIZEN' ? '/portail/citoyen' : routeParDefaut(profil), { replace: true })
+    navigate(profil === 'CITIZEN' ? '/portail/citoyen' : profil === 'CONTRACTOR' ? '/portail/entrepreneur' : routeParDefaut(profil), { replace: true })
   }
 
   return (
