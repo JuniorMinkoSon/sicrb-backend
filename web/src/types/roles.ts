@@ -35,13 +35,13 @@ export const ROLES_META: Record<RoleApplicatif, { libelle: string; utilisateurDe
  * à ce stade dans `sicrb-backend`).
  */
 export const roles: RoleDefinition[] = [
-  { code: 'PRESIDENT', libelle: 'Président du Conseil Régional', description: 'Pilotage stratégique, arbitrages, rapports.' },
-  { code: 'DDP', libelle: 'Direction de la Planification', description: 'PAI, programmes, besoins territoriaux, indicateurs.' },
-  { code: 'DT', libelle: 'Direction Technique', description: 'Projets, chantiers, missions, infrastructures.' },
-  { code: 'DAF', libelle: 'Direction des Affaires Financières', description: 'Budgets, engagements, liquidations, paiements.' },
-  { code: 'CONTROLLER', libelle: 'Contrôleur', description: 'Missions de contrôle, visites, PV, observations.' },
-  { code: 'CONTRACTOR', libelle: 'Entrepreneur / Prestataire', description: 'Marchés, documents, paiements.' },
-  { code: 'ADMIN', libelle: 'Administrateur', description: 'Utilisateurs, référentiels, audit.' },
+  { code: 'PRESIDENT', libelle: 'Président du Conseil Régional', description: 'Pilote et arbitre : décisions stratégiques, indicateurs, rapports.' },
+  { code: 'DDP', libelle: 'Direction de la Planification', description: 'Programme et suit les objectifs : PAI, programmes, indicateurs.' },
+  { code: 'DT', libelle: 'Direction Technique', description: 'Supervise, décide techniquement et finalise : chantiers, réception, exploitation.' },
+  { code: 'DAF', libelle: 'Direction des Affaires Financières', description: 'Gère les finances : budgets, engagements, liquidations, paiements.' },
+  { code: 'CONTROLLER', libelle: 'Contrôleur', description: 'Constate et contrôle : visites terrain, PV, rapports indépendants pour la décision de la DT.' },
+  { code: 'CONTRACTOR', libelle: 'Entrepreneur / Prestataire', description: 'Réalise les travaux : marchés, documents, paiements.' },
+  { code: 'ADMIN', libelle: 'Administrateur', description: 'Administre le système : utilisateurs, référentiels, audit.' },
   { code: 'PUBLIC', libelle: 'Portail public', description: 'Consultation ouverte des investissements.' },
-  { code: 'CITIZEN', libelle: 'Citoyen', description: 'Requêtes et suivi de leur traitement.' },
+  { code: 'CITIZEN', libelle: 'Citoyen', description: 'Propose, consulte et signale : projets, suivi, réclamations.' },
 ]

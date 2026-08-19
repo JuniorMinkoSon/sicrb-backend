@@ -50,9 +50,34 @@ export default function ControleursPage() {
     <>
       <PageHeader
         title="Contrôle & missions"
-        subtitle="Programmation des missions de contrôle, conformité constatée sur les chantiers et suivi des réserves."
+        subtitle="Le contrôleur constate et documente (visites, PV) ; la Direction technique décide et finalise sur la base de ce constat indépendant."
         crumbs={[{ label: 'Contrôle' }, { label: 'Contrôleurs & missions' }]}
       />
+
+      <Card className="mb-4" title="Circuit contrôle → décision technique" description="Constat indépendant du contrôleur, décision et finalisation par la DT">
+        <ol className="flex flex-wrap items-center gap-y-2 text-[11px] font-medium">
+          {[
+            'Contrôle terrain',
+            'Constat documenté (PV)',
+            'Réserves ?',
+          ].map((e, i) => (
+            <li key={e} className="flex items-center">
+              <span className="rounded-full bg-brand-50 px-2.5 py-1 text-brand-800 ring-1 ring-inset ring-brand-200">{e}</span>
+              {i < 2 && <span className="mx-1.5 text-ink-300">→</span>}
+            </li>
+          ))}
+        </ol>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          <div className="rounded-lg border border-amber-200 bg-amber-50/60 p-3">
+            <p className="text-xs font-semibold text-amber-800">OUI — réserves constatées</p>
+            <p className="mt-1 text-xs text-ink-700">Corrections par le prestataire → nouveau contrôle → validation DT.</p>
+          </div>
+          <div className="rounded-lg border border-emerald-200 bg-emerald-50/60 p-3">
+            <p className="text-xs font-semibold text-emerald-800">NON — conforme</p>
+            <p className="mt-1 text-xs text-ink-700">Finalisation par la DT → réception → exploitation.</p>
+          </div>
+        </div>
+      </Card>
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatCard label="Missions" value={formatNombre(toutes.data?.total ?? 0)} />
