@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Configuration locale : le mode d'API et la cible du proxy dépendent du poste.
+.env
+.env.local

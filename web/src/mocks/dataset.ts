@@ -1,5 +1,5 @@
 /**
- * Jeu de données de DÉMONSTRATION du SICRB.
+ * Jeu de donnees de DEMONSTRATION de BAGOUE 360.
  *
  * AVERTISSEMENT : aucune de ces données n'est officielle. Elles sont générées de
  * façon déterministe (graine fixe) uniquement pour éprouver l'ergonomie et les

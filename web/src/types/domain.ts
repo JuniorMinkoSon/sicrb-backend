@@ -1,5 +1,5 @@
 /**
- * Modèle de données du SI du Conseil Régional de la Bagoué (SICRB).
+ * Modele de donnees de BAGOUE 360, plateforme du Conseil Regional de la Bagoue.
  *
  * Ces types décrivent le contrat attendu du backend Quarkus (`sicrb-backend`).
  * Ils sont partagés par les adapters (mock ou HTTP) : changer de source de

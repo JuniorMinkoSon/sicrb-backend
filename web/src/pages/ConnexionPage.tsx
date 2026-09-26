@@ -45,7 +45,7 @@ export default function ConnexionPage() {
     <div className="mx-auto w-full max-w-md px-4 py-12 lg:py-16">
       <div className="mb-6 text-center">
         <h1 className="text-2xl font-bold tracking-tight text-ink-900">Connexion</h1>
-        <p className="mt-1 text-sm text-ink-500">Accédez à la solution interne du SICRB.</p>
+        <p className="mt-1 text-sm text-ink-500">Accédez à la solution interne de BAGOUÉ 360.</p>
       </div>
 
       <Card bodyClassName="p-6">

@@ -1,5 +1,5 @@
 /**
- * Contrat de service du SICRB : c'est la SEULE frontière entre l'UI et les
+ * Contrat de service de BAGOUÉ 360 : c'est la SEULE frontière entre l'UI et les
  * données. Deux implémentations existent :
  *  - `mockApi`  : jeu de données de démonstration en mémoire (par défaut) ;
  *  - `httpApi`  : appels REST vers le backend Quarkus `sicrb-backend`.
