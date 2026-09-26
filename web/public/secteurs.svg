@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <!--
+    Pictogrammes des huit secteurs d'investissement.
+
+    Le modèle de données énumère huit secteurs — eau, éducation, santé, routes,
+    agriculture, énergie, jeunesse, assainissement — et les écrans les
+    affichaient jusqu'ici en toutes lettres seulement. Sur une carte, une liste
+    filtrée ou une répartition budgétaire, un pictogramme se reconnaît avant
+    d'être lu.
+
+    Un seul fichier, référencé par `<use href="/secteurs.svg#secteur-eau"/>` :
+    le navigateur le met en cache une fois pour toutes les pages.
+
+    Le trait est unifié — 1,75 px, extrémités arrondies, grille de 24 — pour que
+    les huit se tiennent côte à côte sans qu'aucun ne pèse plus que les autres.
+    La couleur vient de `currentColor` : le pictogramme suit la teinte de son
+    contexte plutôt que d'en imposer une.
+  -->
+  <symbol id="secteur-eau" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+    <title>Eau potable</title>
+    <path d="M12 3.5c3.2 3.6 5.5 6.6 5.5 9.2a5.5 5.5 0 0 1-11 0c0-2.6 2.3-5.6 5.5-9.2z"/>
+    <path d="M9.4 13.4a2.8 2.8 0 0 0 2.8 2.8"/>
+  </symbol>
+
+  <symbol id="secteur-education" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+    <title>Éducation</title>
+    <path d="M2.5 8.5 12 4.5l9.5 4L12 12.5z"/>
+    <path d="M6 10.6v4.6c0 1.4 2.7 2.8 6 2.8s6-1.4 6-2.8v-4.6"/>
+    <path d="M21.5 8.5v5"/>
+  </symbol>
+
+  <symbol id="secteur-sante" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+    <title>Santé</title>
+    <rect x="3.5" y="5.5" width="17" height="14" rx="2.5"/>
+    <path d="M12 9.5v6M9 12.5h6"/>
+  </symbol>
+
+  <symbol id="secteur-routes" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+    <title>Routes et pistes</title>
+    <path d="M8.5 3.5 5.5 20.5M15.5 3.5l3 17"/>
+    <path d="M12 4.5v2.5M12 10.5v3M12 17v3"/>
+  </symbol>
+
+  <symbol id="secteur-agriculture" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+    <title>Agriculture</title>
+    <path d="M12 20.5v-7"/>
+    <path d="M12 13.5c0-3 1.8-5.5 4.5-6.5.6 3.4-1.2 6.2-4.5 6.5z"/>
+    <path d="M12 15.5c-3.1-.3-4.8-2.8-4.2-6 2.5 1 4.2 3.2 4.2 6z"/>
+  </symbol>
+
+  <symbol id="secteur-energie" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+    <title>Énergie</title>
+    <path d="M13.5 2.5 5.5 13.5h5.5l-1 8 8-11h-5.5z"/>
+  </symbol>
+
+  <symbol id="secteur-jeunesse" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+    <title>Jeunesse et sport</title>
+    <circle cx="12" cy="7" r="3"/>
+    <path d="M5.5 20.5c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5"/>
+  </symbol>
+
+  <symbol id="secteur-assainissement" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+    <title>Assainissement</title>
+    <path d="M4 9.5h16"/>
+    <path d="M6 9.5v8a2.5 2.5 0 0 0 2.5 2.5h7a2.5 2.5 0 0 0 2.5-2.5v-8"/>
+    <path d="M9.5 9.5V6a2.5 2.5 0 0 1 5 0v3.5"/>
+  </symbol>
+</svg>

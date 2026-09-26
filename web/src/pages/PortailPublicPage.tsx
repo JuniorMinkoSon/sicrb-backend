@@ -16,6 +16,7 @@ import {
   Select,
   StatCard,
   Tabs,
+  IconeSecteur,
 } from '../components/ui'
 import {
   descriptionPublique,
@@ -79,7 +80,10 @@ function FicheProjetPublique({
             <MapPin className="size-3.5 text-ink-400" aria-hidden />
             {territoire ?? 'Région de la Bagoué'}
           </span>
-          <Badge tone="info">{humaniser(projet.secteur)}</Badge>
+          <Badge tone="info">
+            <IconeSecteur secteur={projet.secteur} className="mr-1 inline size-3.5 align-[-2px]" />
+            {humaniser(projet.secteur)}
+          </Badge>
           <span className="inline-flex items-center gap-1">
             <Users className="size-3.5 text-ink-400" aria-hidden />
             {formatNombre(projet.beneficiaires)} bénéficiaires

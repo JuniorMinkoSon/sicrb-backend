@@ -10,6 +10,7 @@ import {
   StatCard,
   toneForStatut,
   type Column,
+  IconeSecteur,
 } from '../components/ui'
 import { PROJET_STATUTS, SECTEURS } from '../constants/referentiels'
 import { useProjets, useTerritoires } from '../hooks/useApi'
@@ -28,7 +29,12 @@ export default function ProjetsPage() {
   const columns: Column<Projet>[] = [
     { key: 'code', header: 'Code', sortable: true, render: (p) => <span className="font-medium text-brand-800">{p.code}</span> },
     { key: 'intitule', header: 'Intitulé', sortable: true, render: (p) => <span className="block max-w-80 truncate">{p.intitule}</span> },
-    { key: 'secteur', header: 'Secteur', sortable: true, render: (p) => humaniser(p.secteur) },
+    { key: 'secteur', header: 'Secteur', sortable: true, render: (p) => (
+        <span className="inline-flex items-center gap-1.5">
+          <IconeSecteur secteur={p.secteur} className="size-4 text-ink-400" />
+          {humaniser(p.secteur)}
+        </span>
+      ) },
     { key: 'territoireId', header: 'Territoire', render: (p) => nomTerritoire(p.territoireId) },
     { key: 'statut', header: 'Statut', sortable: true, render: (p) => <Badge tone={toneForStatut(p.statut)}>{humaniser(p.statut)}</Badge> },
     { key: 'budgetPrevu', header: 'Budget', sortable: true, className: 'text-right tabular-nums', render: (p) => formatFcfaCourt(p.budgetPrevu) },

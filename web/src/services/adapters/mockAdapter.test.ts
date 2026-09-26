@@ -1,11 +1,21 @@
 import { describe, expect, it } from 'vitest'
 import { mockAdapter } from './mockAdapter'
+import { quarkusAdapter } from './quarkusAdapter'
 import { adapter, apiMode } from './index'
 
 describe('adapter de démonstration', () => {
-  it('est sélectionné par défaut (aucun endpoint Quarkus métier disponible)', () => {
-    expect(apiMode).toBe('mock')
-    expect(adapter).toBe(mockAdapter)
+  /**
+   * Ce test affirmait que le mode « mock » était retenu par défaut, « aucun
+   * endpoint Quarkus métier » n'existant. Le backend les expose désormais tous,
+   * et la prémisse est donc fausse : c'est la configuration qui tranche.
+   *
+   * On vérifie ce qui doit rester vrai dans les deux cas — que le mode déclaré
+   * et l'adaptateur retenu ne se contredisent jamais. Une divergence ferait
+   * appeler les mocks en croyant parler au serveur, ou l'inverse.
+   */
+  it('retient l’adaptateur correspondant au mode déclaré', () => {
+    expect(['mock', 'http']).toContain(apiMode)
+    expect(adapter).toBe(apiMode === 'http' ? quarkusAdapter : mockAdapter)
   })
 
   it('filtre et pagine les projets côté adapter, pas côté composant', async () => {

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { BarreChart } from '../components/charts/Charts'
-import { Badge, Card, DataTable, FilterBar, PageHeader, ProgressBar, Select, StatCard, toneForStatut, type Column } from '../components/ui'
+import { Badge, Card, DataTable, IconeSecteur, FilterBar, PageHeader, ProgressBar, Select, StatCard, toneForStatut, type Column } from '../components/ui'
 import { PROGRAMME_STATUTS, SECTEURS } from '../constants/referentiels'
 import { useProgrammes } from '../hooks/useApi'
 import { useTableQuery } from '../hooks/useTableQuery'
@@ -16,7 +16,12 @@ export default function ProgrammesPage() {
   const columns: Column<Programme>[] = [
     { key: 'code', header: 'Code', sortable: true, render: (p) => <span className="font-medium text-brand-800">{p.code}</span> },
     { key: 'intitule', header: 'Intitulé', sortable: true, render: (p) => <span className="block max-w-80 truncate">{p.intitule}</span> },
-    { key: 'secteur', header: 'Secteur', sortable: true, render: (p) => humaniser(p.secteur) },
+    { key: 'secteur', header: 'Secteur', sortable: true, render: (p) => (
+        <span className="inline-flex items-center gap-1.5">
+          <IconeSecteur secteur={p.secteur} className="size-4 text-ink-400" />
+          {humaniser(p.secteur)}
+        </span>
+      ) },
     { key: 'statut', header: 'Statut', sortable: true, render: (p) => <Badge tone={toneForStatut(p.statut)}>{humaniser(p.statut)}</Badge> },
     { key: 'nbProjets', header: 'Projets', sortable: true, className: 'text-right tabular-nums', render: (p) => formatNombre(p.nbProjets) },
     { key: 'budgetPrevu', header: 'Budget prévu', sortable: true, className: 'text-right tabular-nums', render: (p) => formatFcfaCourt(p.budgetPrevu) },
