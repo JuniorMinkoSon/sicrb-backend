@@ -22,6 +22,9 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    // Le générateur de migration n'est pas un test : il écrit un fichier
+    // et ne vérifie rien. On l'appelle par `npm run seed:sql`.
+    exclude: ['node_modules/**', 'scripts/**'],
     globals: true,
     setupFiles: './src/test/setup.ts',
     css: false,

@@ -345,20 +345,56 @@ const statutsProjet = [
   'SUSPENDU',
 ] as const
 
-const intitulesProjet = [
-  'Construction de {n} forages équipés de pompes à motricité humaine',
-  'Réhabilitation du groupe scolaire de {loc}',
-  'Construction d’un dispensaire à {loc}',
-  'Reprofilage lourd de la piste {loc} — {loc2} ({n} km)',
-  'Aménagement d’un bas-fond rizicole à {loc}',
-  'Électrification solaire du centre de santé de {loc}',
-  'Construction d’un foyer des jeunes à {loc}',
-  'Réalisation de {n} latrines scolaires à {loc}',
-  'Construction d’un magasin de stockage à {loc}',
-  'Extension du réseau d’adduction d’eau de {loc}',
-  'Construction de {n} salles de classe à {loc}',
-  'Réhabilitation de la maternité de {loc}',
-]
+/**
+ * Intitulés possibles, groupés par secteur.
+ *
+ * Ils étaient tirés d'une liste unique, indépendamment du secteur du programme
+ * porteur : un dispensaire se retrouvait classé « Routes », une maternité en
+ * « Assainissement ». Sur une liste de projets, l'incohérence saute aux yeux et
+ * fait douter du reste des données.
+ */
+const intitulesParSecteur: Record<Secteur, string[]> = {
+  EAU: [
+    'Construction de {n} forages équipés de pompes à motricité humaine',
+    'Extension du réseau d’adduction d’eau de {loc}',
+    'Réhabilitation de {n} points d’eau à {loc}',
+  ],
+  EDUCATION: [
+    'Réhabilitation du groupe scolaire de {loc}',
+    'Construction de {n} salles de classe à {loc}',
+    'Équipement du collège de proximité de {loc}',
+  ],
+  SANTE: [
+    'Construction d’un dispensaire à {loc}',
+    'Réhabilitation de la maternité de {loc}',
+    'Équipement du centre de santé rural de {loc}',
+  ],
+  ROUTES: [
+    'Reprofilage lourd de la piste {loc} — {loc2} ({n} km)',
+    'Ouverture de {n} km de pistes rurales autour de {loc}',
+    'Construction d’un ouvrage de franchissement à {loc}',
+  ],
+  AGRICULTURE: [
+    'Aménagement d’un bas-fond rizicole à {loc}',
+    'Construction d’un magasin de stockage à {loc}',
+    'Aménagement de {n} hectares maraîchers à {loc}',
+  ],
+  ENERGIE: [
+    'Électrification solaire du centre de santé de {loc}',
+    'Extension du réseau électrique de {loc}',
+    'Installation de {n} lampadaires solaires à {loc}',
+  ],
+  JEUNESSE: [
+    'Construction d’un foyer des jeunes à {loc}',
+    'Aménagement du terrain de sport de {loc}',
+    'Équipement du centre de formation de {loc}',
+  ],
+  ASSAINISSEMENT: [
+    'Réalisation de {n} latrines scolaires à {loc}',
+    'Aménagement du réseau de drainage de {loc}',
+    'Construction d’un dépotoir contrôlé à {loc}',
+  ],
+}
 
 export const projets: Projet[] = Array.from({ length: 132 }, (_, i) => {
   const programme = programmes[i % programmes.length]
@@ -388,7 +424,9 @@ export const projets: Projet[] = Array.from({ length: 132 }, (_, i) => {
   return {
     id: `prj-${i + 1}`,
     code: `PRJ-${String(i + 1).padStart(4, '0')}`,
-    intitule: pick(intitulesProjet)
+    // L'intitulé est tiré dans le secteur du programme porteur : c'est lui qui
+    // donne sa nature au projet.
+    intitule: pick(intitulesParSecteur[programme.secteur])
       .replaceAll('{loc2}', autre.nom)
       .replaceAll('{loc}', territoire.nom)
       .replaceAll('{n}', String(int(2, 18))),
