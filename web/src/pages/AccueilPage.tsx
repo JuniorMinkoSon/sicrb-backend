@@ -16,7 +16,7 @@ import {
   Users,
 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Button, Card, IconeSecteur, StatCard } from '../components/ui'
+import { Button, Card, Carrousel, IconeSecteur, LIBELLE_SECTEUR, StatCard, teinteSecteur } from '../components/ui'
 import { useDashboard, useProjets, useTerritoires } from '../hooks/useApi'
 import { STATUTS_PUBLICS } from '../constants/portailPublic'
 import { formatFcfaCourt, formatNombre, formatPourcent, humaniser } from '../utils/format'
@@ -224,6 +224,46 @@ export default function AccueilPage() {
         </div>
       </section>
 
+      {/* Les secteurs d'intervention. Le dossier les présente en huit blocs :
+          chacun garde ici sa couleur, reprise partout ailleurs dans
+          l'application, et le chiffre vient de la synthèse — pas d'une
+          constante qui vieillirait sans qu'on le voie. */}
+      {(synthese?.parSecteur.length ?? 0) > 0 && (
+        <section className="mx-auto max-w-[1200px] px-4 py-12 lg:px-6">
+          <h2 className="text-lg font-semibold tracking-tight text-ink-900">Nos domaines d’intervention</h2>
+          <p className="mt-1 text-sm text-ink-500">
+            Huit secteurs structurent l’investissement régional, du forage villageois à la piste rurale.
+          </p>
+
+          <Carrousel className="mt-6" ariaLabel="Domaines d’intervention" itemClassName="w-56">
+            {synthese!.parSecteur.map((part) => {
+              const teinte = teinteSecteur(part.secteur)
+              return (
+                <button
+                  key={part.secteur}
+                  type="button"
+                  onClick={() => navigate(`/portail/public?secteur=${part.secteur}`)}
+                  className={`flex h-full w-full flex-col overflow-hidden rounded-xl border text-left transition hover:shadow-md ${teinte.bordure}`}
+                >
+                  <span className={`flex h-24 items-center justify-center bg-gradient-to-br ${teinte.degrade}`}>
+                    <IconeSecteur secteur={part.secteur} className="size-10 text-white" />
+                  </span>
+                  <span className={`flex flex-1 flex-col gap-1 p-4 ${teinte.fond}`}>
+                    <span className={`text-sm font-semibold ${teinte.texte}`}>
+                      {LIBELLE_SECTEUR[part.secteur] ?? humaniser(part.secteur)}
+                    </span>
+                    <span className="text-xs text-ink-600">
+                      {formatNombre(part.projets)} projet{part.projets > 1 ? 's' : ''} ·{' '}
+                      {formatFcfaCourt(part.budget)}
+                    </span>
+                  </span>
+                </button>
+              )
+            })}
+          </Carrousel>
+        </section>
+      )}
+
       {/* Projets récents : la preuve par l'exemple, tirée de la base. */}
       {(recents.data?.items.length ?? 0) > 0 && (
         <section className="border-t border-ink-200 bg-white">
@@ -244,15 +284,22 @@ export default function AccueilPage() {
               </Link>
             </div>
 
-            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {/* Un rang qui defile : la page garde sa hauteur quel que soit
+                le nombre de projets remontes. */}
+            <Carrousel className="mt-6" ariaLabel="Projets recents">
               {recents.data?.items.map((p) => {
                 const statut = STATUTS_PUBLICS[p.statut]
+                const teinte = teinteSecteur(p.secteur)
                 return (
-                  <Card key={p.id} bodyClassName="flex h-full flex-col p-5">
+                  <Card key={p.id} bodyClassName="flex h-full flex-col p-0">
+                    {/* Le bandeau donne au secteur sa couleur ; le libelle
+                        reste ecrit, la teinte ne porte jamais seule le sens. */}
+                    <div className={`h-1.5 rounded-t-lg bg-gradient-to-r ${teinte.degrade}`} aria-hidden />
+                    <div className="flex flex-1 flex-col p-5">
                     <div className="flex items-start justify-between gap-3">
-                      <span className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-600">
-                        <IconeSecteur secteur={p.secteur} className="size-4 text-brand-600" />
-                        {humaniser(p.secteur)}
+                      <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium ${teinte.fond} ${teinte.texte}`}>
+                        <IconeSecteur secteur={p.secteur} className="size-4" />
+                        {LIBELLE_SECTEUR[p.secteur] ?? humaniser(p.secteur)}
                       </span>
                       <span
                         className="inline-flex shrink-0 items-center gap-1.5 text-xs font-medium"
@@ -280,10 +327,11 @@ export default function AccueilPage() {
                         {Math.round(p.avancementPhysique)} % réalisé
                       </span>
                     </div>
+                    </div>
                   </Card>
                 )
               })}
-            </div>
+            </Carrousel>
           </div>
         </section>
       )}

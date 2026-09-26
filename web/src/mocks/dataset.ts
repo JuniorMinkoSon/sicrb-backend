@@ -31,6 +31,8 @@ import type {
   RequeteCitoyenne,
   Secteur,
   SessionDeliberante,
+  PointOrdreDuJour,
+  DemandeParole,
   Territoire,
   Utilisateur,
   WorkflowInstance,
@@ -683,6 +685,122 @@ export const documents: GedDocument[] = Array.from({ length: 186 }, (_, i) => {
 
 missions.forEach((m) => {
   m.documentIds = documents.filter((d) => d.missionId === m.id).map((d) => d.id)
+})
+
+/* --------------------------------------------------- Ordre du jour et délibérations */
+
+/**
+ * L'ordre du jour est généré après les projets et les documents : un point y
+ * renvoie, et ces renvois sont ce qui donne son intérêt à l'écran de séance —
+ * on ouvre le projet dont on débat sans quitter la session.
+ *
+ * Les statuts suivent celui de la session, et cette cohérence n'est pas
+ * cosmétique : une séance « en cours » n'a qu'un seul point à l'ordre du jour
+ * en discussion, et une séance planifiée n'a encore rien voté. Sans cette
+ * règle, l'écran de vote afficherait deux points simultanés, ou un résultat
+ * pour une séance qui ne s'est pas tenue.
+ */
+const nomElu = () =>
+  `${pick(['Coulibaly', 'Ouattara', 'Silué', 'Soro', 'Koné', 'Yéo', 'Doumbia', 'Bamba', 'Touré', 'Diomandé'])} ${pick(['Adama', 'Awa', 'Sékou', 'Mariam', 'Yacouba', 'Nadège', 'Ibrahim', 'Fatoumata', 'Lassina'])}`
+
+const fonctionsElus = [
+  'Conseiller régional',
+  'Vice-président',
+  'Président de commission',
+  'Rapporteur de commission',
+  'Conseiller régional',
+  'Directeur technique',
+]
+
+const naturesPoint = [
+  'Adoption du procès-verbal de la séance précédente',
+  'Approbation du plan annuel d’investissement',
+  'Autorisation de programme',
+  'Attribution du marché',
+  'Affectation budgétaire complémentaire',
+  'Réception définitive des ouvrages',
+  'Convention de partenariat',
+  'Rapport d’exécution budgétaire',
+  'Questions diverses',
+]
+
+export const pointsOrdreDuJour: PointOrdreDuJour[] = []
+export const demandesParole: DemandeParole[] = []
+
+sessions.forEach((session) => {
+  const nb = int(3, 7)
+  // Une séance en cours s'arrête sur un point : ceux d'avant sont tranchés,
+  // ceux d'après attendent.
+  const courant = session.statut === 'EN_COURS' ? int(0, nb - 1) : -1
+
+  for (let k = 0; k < nb; k += 1) {
+    const projet = rand() < 0.55 ? pick(projets) : null
+    const programme = projet ? null : rand() < 0.5 ? pick(programmes) : null
+
+    let statut: PointOrdreDuJour['statut']
+    if (session.statut === 'PLANIFIEE') statut = 'A_EXAMINER'
+    else if (session.statut === 'CLOTUREE') statut = pick(['ADOPTE', 'ADOPTE', 'ADOPTE', 'REJETE', 'REPORTE'] as const)
+    else if (k < courant) statut = pick(['ADOPTE', 'ADOPTE', 'REJETE', 'REPORTE'] as const)
+    else if (k === courant) statut = pick(['EN_DISCUSSION', 'VOTE_EN_COURS'] as const)
+    else statut = 'A_EXAMINER'
+
+    // Les voix n'existent qu'une fois le vote tenu, et leur somme ne peut pas
+    // dépasser les présents : un décompte invraisemblable décrédibiliserait
+    // tout l'écran.
+    const vote = statut === 'ADOPTE' || statut === 'REJETE'
+    const abstention = vote ? int(0, Math.floor(session.presents * 0.2)) : null
+    const exprimes = vote ? session.presents - (abstention as number) : 0
+    const pour = vote ? (statut === 'ADOPTE' ? int(Math.ceil(exprimes / 2) + 1, exprimes) : int(0, Math.floor(exprimes / 2))) : null
+    const contre = vote ? exprimes - (pour as number) : null
+
+    const intitule = projet
+      ? `${pick(naturesPoint.slice(2, 7))} — ${projet.intitule}`
+      : programme
+        ? `${pick(naturesPoint.slice(1, 4))} — ${programme.intitule}`
+        : pick(naturesPoint)
+
+    pointsOrdreDuJour.push({
+      id: `pdj-${session.id}-${k + 1}`,
+      sessionId: session.id,
+      ordre: k + 1,
+      intitule,
+      rapporteur: nomElu(),
+      statut,
+      projetId: projet?.id ?? null,
+      programmeId: programme?.id ?? null,
+      dureePrevueMin: pick([10, 15, 20, 30, 45]),
+      pour,
+      contre,
+      abstention,
+      deliberation: statut === 'ADOPTE' ? `DÉL-${session.date.slice(0, 4)}-${String(pointsOrdreDuJour.length + 1).padStart(3, '0')}` : null,
+    })
+  }
+
+  // Les demandes de parole ne concernent que le point ouvert : une séance
+  // close ou non commencée n'a pas de file d'attente.
+  if (courant >= 0) {
+    const point = pointsOrdreDuJour.find((x) => x.sessionId === session.id && x.ordre === courant + 1)!
+    for (let d = 0; d < int(0, 4); d += 1) {
+      demandesParole.push({
+        id: `parl-${session.id}-${d + 1}`,
+        sessionId: session.id,
+        pointId: point.id,
+        demandeur: nomElu(),
+        fonction: pick(fonctionsElus),
+        demandeeA: `${String(int(9, 16)).padStart(2, '0')}:${String(int(0, 59)).padStart(2, '0')}`,
+        statut: d === 0 ? 'ACCORDEE' : pick(['EN_ATTENTE', 'EN_ATTENTE', 'ECOULEE'] as const),
+      })
+    }
+  }
+
+  // Une séance produit des pièces : convocation, ordre du jour, procès-verbal.
+  // Le registre affichait « 0 pièce » pour toutes les sessions faute de ce
+  // rattachement.
+  session.documentIds = documents
+    .filter((_, i) => i % sessions.length === sessions.indexOf(session))
+    .slice(0, int(2, 5))
+    .map((d) => d.id)
+  session.deliberations = pointsOrdreDuJour.filter((x) => x.sessionId === session.id && x.statut === 'ADOPTE').length
 })
 
 /* -------------------------------------------------------------------- Workflows */

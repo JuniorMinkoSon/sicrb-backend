@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { Badge, Card, DataTable, FilterBar, PageHeader, Select, StatCard, toneForStatut, type Column } from '../components/ui'
 import { useSessions } from '../hooks/useApi'
 import { useTableQuery } from '../hooks/useTableQuery'
@@ -5,6 +6,7 @@ import type { SessionDeliberante } from '../types/domain'
 import { formatDate, formatNombre, humaniser } from '../utils/format'
 
 export default function GouvernancePage() {
+  const navigate = useNavigate()
   const t = useTableQuery({ size: 10, sort: 'date:desc' })
   const { data, isLoading, error, refetch } = useSessions(t.query)
   const toutes = useSessions({ size: 200 })
@@ -73,6 +75,7 @@ export default function GouvernancePage() {
           onPage={t.setPage}
           onSize={t.setSize}
           rowKey={(s) => s.id}
+          onRowClick={(s) => navigate(`/gouvernance/${s.id}`)}
         />
       </Card>
     </>

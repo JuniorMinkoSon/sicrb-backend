@@ -109,6 +109,18 @@ export const mockAdapter: SicrbApi = {
     return paginate(rows, { size: 10, sort: 'date:desc', ...query })
   },
 
+  async session(id: Id) {
+    await delay()
+    const session = db.sessions.find((s) => s.id === id)
+    if (!session) throw new Error(`Session ${id} introuvable`)
+    return {
+      session,
+      points: db.pointsOrdreDuJour.filter((p) => p.sessionId === id).sort((a, b) => a.ordre - b.ordre),
+      paroles: db.demandesParole.filter((p) => p.sessionId === id),
+      documents: db.documents.filter((d) => session.documentIds.includes(d.id)),
+    }
+  },
+
   async pais() {
     await delay()
     return db.pais

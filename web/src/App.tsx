@@ -13,6 +13,7 @@ const PortailPublicPage = lazy(() => import('./pages/PortailPublicPage'))
 const PortailCitoyenPage = lazy(() => import('./pages/PortailCitoyenPage'))
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
 const GouvernancePage = lazy(() => import('./pages/GouvernancePage'))
+const SessionDetailPage = lazy(() => import('./pages/SessionDetailPage'))
 const PaiPage = lazy(() => import('./pages/PaiPage'))
 const TerritoirePage = lazy(() => import('./pages/TerritoirePage'))
 const TerritoireDetailPage = lazy(() => import('./pages/TerritoireDetailPage'))
@@ -60,6 +61,7 @@ export default function App() {
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/gouvernance" element={<GouvernancePage />} />
+            <Route path="/gouvernance/:id" element={<SessionDetailPage />} />
             <Route path="/pai" element={<PaiPage />} />
             <Route path="/territory" element={<TerritoirePage />} />
             <Route path="/territoire" element={<Navigate to="/territory" replace />} />

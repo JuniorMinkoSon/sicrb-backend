@@ -36,6 +36,8 @@ import type {
   RapportModele,
   RequeteCitoyenne,
   SessionDeliberante,
+  PointOrdreDuJour,
+  DemandeParole,
   Territoire,
   Utilisateur,
   WorkflowEtape,
@@ -72,6 +74,19 @@ export interface TerritoireDetail {
   requetes: RequeteCitoyenne[]
 }
 
+/**
+ * Ce que montre l'écran d'une session : son ordre du jour, les demandes de
+ * parole et les pièces jointes. Le point en cours n'est pas un champ à part —
+ * c'est celui dont le statut le dit, sans quoi deux sources pourraient se
+ * contredire sur le point à l'écran.
+ */
+export interface SessionDetail {
+  session: SessionDeliberante
+  points: PointOrdreDuJour[]
+  paroles: DemandeParole[]
+  documents: GedDocument[]
+}
+
 export interface SicrbApi {
   dashboard(): Promise<DashboardSynthese>
 
@@ -79,6 +94,7 @@ export interface SicrbApi {
   territoire(id: Id): Promise<TerritoireDetail>
 
   sessions(query?: PageQuery): Promise<Page<SessionDeliberante>>
+  session(id: Id): Promise<SessionDetail>
 
   pais(): Promise<Pai[]>
 

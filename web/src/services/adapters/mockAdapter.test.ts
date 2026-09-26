@@ -70,6 +70,35 @@ describe('adapter de démonstration', () => {
     expect(creee.statut).toBeDefined()
   })
 
+  it('ouvre au plus un point a la fois dans une seance', async () => {
+    // Le point en cours n'est pas un champ : c'est celui que son statut
+    // designe. Deux points ouverts simultanement afficheraient deux votes
+    // concurrents, et rien dans le type n'empeche ce cas.
+    const { items } = await mockAdapter.sessions({ size: 200 })
+    for (const s of items) {
+      const { points, paroles } = await mockAdapter.session(s.id)
+      const ouverts = points.filter((p) => p.statut === 'EN_DISCUSSION' || p.statut === 'VOTE_EN_COURS')
+      expect(ouverts.length).toBeLessThanOrEqual(1)
+
+      // Une seance qui ne s'est pas tenue n'a rien vote.
+      if (s.statut === 'PLANIFIEE') {
+        expect(points.every((p) => p.statut === 'A_EXAMINER')).toBe(true)
+        expect(paroles).toHaveLength(0)
+      }
+
+      // Les suffrages ne peuvent pas depasser les presents : un decompte
+      // invraisemblable decredibiliserait tout l'ecran.
+      points
+        .filter((p) => p.pour !== null)
+        .forEach((p) => {
+          expect(p.pour! + p.contre! + p.abstention!).toBeLessThanOrEqual(s.presents)
+        })
+
+      // Le compteur de la seance doit correspondre aux actes adoptes.
+      expect(s.deliberations).toBe(points.filter((p) => p.statut === 'ADOPTE').length)
+    }
+  })
+
   it('renvoie une recherche transversale avec des liens de navigation', async () => {
     const resultats = await mockAdapter.recherche('projet')
     expect(resultats.length).toBeGreaterThan(0)

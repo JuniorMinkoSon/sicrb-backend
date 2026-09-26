@@ -21,6 +21,9 @@ export const useTerritoire = (id?: Id) =>
 export const useSessions = (query?: PageQuery) =>
   useQuery({ queryKey: ['sessions', clean(query)], queryFn: () => sicrbService.sessions(query) })
 
+export const useSession = (id?: Id) =>
+  useQuery({ queryKey: ['session', id], queryFn: () => sicrbService.session(id as Id), enabled: Boolean(id) })
+
 export const usePais = () => useQuery({ queryKey: ['pais'], queryFn: () => sicrbService.pais() })
 
 export const useProgrammes = (query?: PageQuery) =>

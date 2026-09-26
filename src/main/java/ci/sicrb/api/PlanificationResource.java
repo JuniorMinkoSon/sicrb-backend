@@ -111,4 +111,33 @@ public class PlanificationResource {
                 : SessionDeliberante.<SessionDeliberante>find(f.hql(), tri, f.valeurs());
         return Requetes.paginer(query, page, size);
     }
+
+    /**
+     * Le détail d'une séance : son ordre du jour, les demandes de parole et
+     * les pièces.
+     *
+     * <p>Les points sont triés par leur rang : l'ordre du jour est un ordre,
+     * pas une liste. Les pièces sont relues depuis les identifiants portés par
+     * la session — la liste peut être vide, et un {@code IN ()} vide n'est pas
+     * du SQL valide.
+     */
+    @GET
+    @Path("/gouvernance/sessions/{id}")
+    public Response session(@PathParam("id") String id) {
+        SessionDeliberante session = SessionDeliberante.findById(id);
+        if (session == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(Map.of("message", "Session introuvable : " + id))
+                    .build();
+        }
+
+        Vues.SessionDetail vue = new Vues.SessionDetail();
+        vue.session = session;
+        vue.points = PointOrdreDuJour.list("sessionId", Sort.by("ordre"), id);
+        vue.paroles = DemandeParole.list("sessionId", id);
+        vue.documents = session.documentIds.isEmpty()
+                ? List.of()
+                : GedDocument.list("id in ?1", session.documentIds);
+        return Response.ok(vue).build();
+    }
 }

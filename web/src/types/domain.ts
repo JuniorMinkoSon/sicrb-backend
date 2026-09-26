@@ -59,6 +59,51 @@ export interface SessionDeliberante {
   documentIds: Id[]
 }
 
+/**
+ * Une session se tient point par point : l'ordre du jour en fixe la liste, le
+ * président ouvre chacun, la parole se demande, puis l'assemblée vote. Le
+ * compteur `deliberations` de la session ne dit que le nombre d'actes produits ;
+ * ce sont ces points qui disent ce qui a été décidé, et comment.
+ */
+export type PointStatut =
+  | 'A_EXAMINER'
+  | 'EN_DISCUSSION'
+  | 'VOTE_EN_COURS'
+  | 'ADOPTE'
+  | 'REJETE'
+  | 'REPORTE'
+
+export interface PointOrdreDuJour {
+  id: Id
+  sessionId: Id
+  ordre: number
+  intitule: string
+  rapporteur: string
+  statut: PointStatut
+  /** Le point porte souvent sur un projet ou un programme inscrit au PAI. */
+  projetId: Id | null
+  programmeId: Id | null
+  dureePrevueMin: number
+  /** Voix exprimées. Nulles tant que le vote n'a pas eu lieu. */
+  pour: number | null
+  contre: number | null
+  abstention: number | null
+  /** Numéro de l'acte, une fois la délibération adoptée. */
+  deliberation: string | null
+}
+
+export type ParoleStatut = 'EN_ATTENTE' | 'ACCORDEE' | 'ECOULEE'
+
+export interface DemandeParole {
+  id: Id
+  sessionId: Id
+  pointId: Id
+  demandeur: string
+  fonction: string
+  demandeeA: string
+  statut: ParoleStatut
+}
+
 /* -------------------------------------------------------------- Planification */
 
 export type PaiStatut = 'BROUILLON' | 'CONCERTATION' | 'ADOPTE' | 'EN_EXECUTION' | 'CLOTURE'

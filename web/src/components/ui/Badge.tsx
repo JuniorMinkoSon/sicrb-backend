@@ -50,8 +50,8 @@ export function toneForStatut(statut: string): Tone {
   if (['VALIDE', 'PAYE', 'REALISEE', 'CLOTUREE', 'ATTEINT', 'EXPLOITATION', 'ADOPTE', 'AGREE', 'BON', 'TRAITEE', 'VALIDEE', 'SUCCES', 'DISPONIBLE'].includes(s))
     return 'success'
   if (['REJETE', 'REJETEE', 'ABANDONNE', 'HORS_SERVICE', 'RADIE', 'ECHEC', 'CRITIQUE', 'EN_PANNE', 'RETARD'].includes(s)) return 'danger'
-  if (['SUSPENDU', 'DEGRADE', 'VIGILANCE', 'MOYEN', 'A_ARBITRER', 'EN_VALIDATION', 'DEMANDEE', 'RECUE', 'BROUILLON'].includes(s)) return 'warning'
-  if (['EN_COURS', 'EN_TRAVAUX', 'EN_INSTRUCTION', 'PASSATION', 'ENGAGE', 'VISE', 'LIQUIDE', 'PLANIFIEE', 'RAPPORT_DEPOSE', 'AFFECTE', 'DEPOSEE', 'INSTRUITE'].includes(s))
+  if (['SUSPENDU', 'DEGRADE', 'VIGILANCE', 'MOYEN', 'A_ARBITRER', 'EN_VALIDATION', 'DEMANDEE', 'RECUE', 'BROUILLON', 'REPORTE'].includes(s)) return 'warning'
+  if (['EN_COURS', 'EN_TRAVAUX', 'EN_INSTRUCTION', 'PASSATION', 'ENGAGE', 'VISE', 'LIQUIDE', 'PLANIFIEE', 'RAPPORT_DEPOSE', 'AFFECTE', 'DEPOSEE', 'INSTRUITE', 'EN_DISCUSSION', 'VOTE_EN_COURS'].includes(s))
     return 'info'
   return 'neutral'
 }

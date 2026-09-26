@@ -23,10 +23,15 @@ import { resolve } from 'node:path'
 import { test } from 'vitest'
 import * as d from '../src/mocks/dataset'
 
-const SORTIE = resolve(
-  import.meta.dirname,
-  '../../src/main/resources/db/migration/V2__donnees_initiales.sql',
-)
+const MIGRATIONS = resolve(import.meta.dirname, '../../src/main/resources/db/migration')
+const SORTIE = resolve(MIGRATIONS, 'V2__donnees_initiales.sql')
+
+/**
+ * L'ordre du jour est chargé à part : ses tables naissent en V3, et V2
+ * s'exécute avant. Insérer dans une table qui n'existe pas encore ferait
+ * échouer la migration au premier démarrage.
+ */
+const SORTIE_ORDRE_DU_JOUR = resolve(MIGRATIONS, 'V4__ordre_du_jour_donnees.sql')
 
 /** Échappement SQL : une apostrophe doublée, un absent devient NULL. */
 function v(x: unknown): string {
@@ -220,4 +225,22 @@ test('génère la migration de données initiales', () => {
   ]))
 
   writeFileSync(SORTIE, parts.filter(Boolean).join('\n'), 'utf8')
+
+  const odj: string[] = [
+    '-- BAGOUÉ 360 : ordre du jour des séances et demandes de parole.',
+    '--',
+    '-- FICHIER GÉNÉRÉ — ne pas modifier à la main.',
+    '-- Source : web/src/mocks/dataset.ts · Régénérer : cd web && npm run seed:sql',
+    '--',
+    '-- Séparé de V2 parce que les tables visées naissent en V3.',
+    '',
+    insert('point_ordre_du_jour', d.pointsOrdreDuJour as never, [
+      'id', 'sessionId', 'ordre', 'intitule', 'rapporteur', 'statut', 'projetId',
+      'programmeId', 'dureePrevueMin', 'pour', 'contre', 'abstention', 'deliberation',
+    ]),
+    insert('demande_parole', d.demandesParole as never, [
+      'id', 'sessionId', 'pointId', 'demandeur', 'fonction', 'demandeeA', 'statut',
+    ]),
+  ]
+  writeFileSync(SORTIE_ORDRE_DU_JOUR, odj.filter(Boolean).join('\n'), 'utf8')
 })

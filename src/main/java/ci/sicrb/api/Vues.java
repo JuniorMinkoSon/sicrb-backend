@@ -127,6 +127,21 @@ public final class Vues {
         }
     }
 
+    /**
+     * Ce que montre l'écran d'une séance : l'ordre du jour, la file des
+     * demandes de parole et les pièces examinées.
+     *
+     * <p>Le point en cours n'est pas un champ de cette vue : c'est celui dont
+     * le statut le dit. Deux sources auraient pu se contredire sur le point
+     * affiché.
+     */
+    public static class SessionDetail {
+        public SessionDeliberante session;
+        public List<PointOrdreDuJour> points = new ArrayList<>();
+        public List<DemandeParole> paroles = new ArrayList<>();
+        public List<GedDocument> documents = new ArrayList<>();
+    }
+
     /** Synthèse d'ouverture : ce que le Président voit en arrivant. */
     public static class DashboardSynthese {
         public long budgetPrevu;

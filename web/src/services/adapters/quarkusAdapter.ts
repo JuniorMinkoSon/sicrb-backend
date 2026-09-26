@@ -1,10 +1,9 @@
 /**
- * Implémentation HTTP du contrat `SicrbApi`, prête pour le backend Quarkus.
+ * Implémentation HTTP du contrat `SicrbApi`, servie par le backend Quarkus.
  *
- * ATTENTION : à ce jour, `sicrb-backend` n'expose que `/hello`, un health check
- * et une ressource Panache d'exemple. Aucun de ces endpoints n'existe encore ;
- * cette classe documente le contrat attendu et devient utilisable dès que les
- * ressources Quarkus correspondantes sont implémentées.
+ * Les ressources correspondantes existent toutes sous `/api` ; les chemins
+ * ci-dessous en sont le miroir exact. Une divergence ne casserait pas la
+ * compilation — elle produirait un écran vide et une erreur réseau.
  *
  * Activation : `VITE_API_MODE=http` (voir `.env.example`).
  */
@@ -57,6 +56,7 @@ export const quarkusAdapter: SicrbApi = {
   territoire: (id) => req(`/territoires/${id}`),
 
   sessions: (query) => req(`/gouvernance/sessions${qs(query)}`),
+  session: (id) => req(`/gouvernance/sessions/${id}`),
 
   pais: () => req('/planification/pai'),
 
