@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from './components/layout/AppLayout'
 import { PublicLayout } from './components/layout/PublicLayout'
+import { RequireRole } from './components/layout/RequireRole'
 import { RequireAuth } from './components/layout/RequireAuth'
 import { LoadingState } from './components/ui'
 
@@ -52,8 +53,10 @@ export default function App() {
           <Route path="/portail/citoyen" element={<PortailCitoyenPage />} />
         </Route>
 
-        {/* Solution interne : accessible après connexion */}
+        {/* Solution interne : connexion exigée, puis habilitation par rôle.
+            RequireAuth dit qui entre, RequireRole dit où. */}
         <Route element={<RequireAuth />}>
+          <Route element={<RequireRole />}>
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/gouvernance" element={<GouvernancePage />} />
@@ -83,6 +86,7 @@ export default function App() {
             <Route path="/audit" element={<AuditPage />} />
             <Route path="/administration" element={<AdministrationPage />} />
             <Route path="/portail/entrepreneur" element={<PortailEntrepreneurPage />} />
+          </Route>
           </Route>
         </Route>
 
